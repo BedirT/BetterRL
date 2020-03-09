@@ -3,14 +3,58 @@ One day, I had a project for my Advanced RL class, and I wanted to implement two
 
 Anyways it might be an introductory level repository, but I believe everyone from every level of knowledge can find something for themselves, feel free to check it out, and point out my mistakes and contribute if interested.
 
-## Environments
+**PS:** Don't get distracted by the number of lines for the codes, I have a lot of comments, if you start reading you will see everything is really straight forward to understand.
+
+### Code Structure
+
+I used a simple structure that pretty much everyone who used gym is familiar with. Also RL Glue is using a similar structure I believe. We have three components for any RL experiment;
+
+- Environment
+- Agent
+- Experiment
+
+Therefor env and agent needs to be seperated, and combined in the experiment part. I have an environment structure which is same for all the environments I implemented. There are two main functions;
+
+- ` step(action)` : Takes an action an returns the observations, reward and if terminal state is reached or not
+- ` reset()`: Returns the initial state, no action is needed.
+
+And agent follows pretty much only two functions outside the class;
+
+- `step(obs)`: Takes the observations and returns an action.
+- ` update(observations, actions, rewards)`: Updates the agent wheather weights or tables whatever is needed depending on the algorithm.
+
+So simple example would be like
+
+```python
+num_of_episodes = 100
+for e in range(num_of_episodes):
+  obs = env.reset()
+  done = False
+  while not done:
+    action = agent.step(obs)
+    obs, reward, done = env.step(action)
+    
+    observationos, rewards, actions = record_data(obs, reward, action)
+    
+		agent.update(observationos, actions, rewards)
+```
+
+### Documentation Structure
+
+The main source of this repository is the book, Introduction to Reinforcement Learning (Sutton and Barto, 2018). Therefor there will be two parts for the Algorithms; the first one is for the algorithms in the book, and the second one is the extra ones from the papers I found interesting.
+
+First part also divided into two parts, Value Based and Policy Based algorithms. Naturally following from the book value-based methods also have prediction and control methods seperated. Each algorithm will mention the corresponding chapter in the book, and pages if interested in more. Otherwise I will have a tutorial linked to my blog that I try to explain from scratch as well as the code for you to re-use or read (with comments).  
+
+Even though the main purpose of the repository is educational, it still can be used as a library that uses RL algorithm (in a linear fashion), meaning that every algorithm is implemented as efficiently as possible. To add neural networks you can modify the corresponding algorithm, should be easy at least for the *function approximation* algorithms
+
+### Environments
 
 - [x] [Grid World](/environments/grid_world.py)
 - [ ] Cart Pole
 - [ ] Mountain Car
 - [ ] Rock-Paper-Scissors
 
-## Value-Based Algorithms
+### Value-Based Algorithms
 
 #### Prediction
 
@@ -21,9 +65,7 @@ Anyways it might be an introductory level repository, but I believe everyone fro
 - [ ] Differential Semi-Gradient SARSA
 - [ ] Differential Semi-Gradient n-step SARSA
 
-## Policy Gradient Algorithms
-
-#### Control
+### Policy-Based Algorithms
 
 - [x] REINFORCE
 - [ ] REINFORCE with Baseline
