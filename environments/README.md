@@ -5,7 +5,7 @@ Anyways it might be an introductory level repository, but I believe everyone fro
 
 ## Environments
 
-- [x] [Grid World](/environments/grid_world.py)
+- [x] Grid World
 - [ ] Cart Pole
 - [ ] Mountain Car
 - [ ] Rock-Paper-Scissors
