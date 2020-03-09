@@ -44,12 +44,18 @@ class grid_world:
         self.portal = portal
         if self.portal:
             self.portal_prob = portal_prob
-
-        # Initializing the action possibilities, for example for chain env.
-        # we would change the actions to 0, 1 instead of 0-3.
-        self.action_space = np.array([0, 1, 2, 3])
+        
+        # Everything else is initialized here
+        self.start()
 
     def reset(self):
+        '''
+        Function to call for initial agent position.
+        '''
+        self.start() # resets the environment to initial position
+        return self.agent_pos
+
+    def start(self):
         '''
         The environment is created here, to have a custom environment just use
         the determined values for each item. The grid must be a 2D list. There are
@@ -96,16 +102,17 @@ class grid_world:
         self.reward_b = 0 # reward when hitting the walls or boundries 
         self.reward_t = -1 # reward per time step
         self.reward_g = 10 # reward if the agent gets to the goal
-        
-        # size of the grid 
-        self.grid_size = [len(self.the_world),len(self.the_world[0])]
  
         # Deciding on the portals if the portals are activated
         if self.portal:
             self._choose_portals()
+        
+        # size of the grid 
+        self.grid_size = [len(self.the_world),len(self.the_world[0])]
 
-        # Returning the agents initial position for the initial state
-        return self.agent_pos
+        # Initializing the action possibilities, for example for chain env.
+        # we would change the actions to 0, 1 instead of 0-3.
+        self.action_space = np.array([0, 1, 2, 3])
 
     def step(self, action):
         '''
