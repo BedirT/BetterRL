@@ -79,6 +79,13 @@ class grid_world:
             ['.', '.', '.', '.' , '|', '.', '.', '.', '.'],
             ['D2','.', '.', '.' , '.', '.', '.', '.', 'P2']
         ]
+        self.the_world = [
+            ['.',  'D1','|', '.', 'P1'],
+            ['G',  '.', '|', '.', '.'],
+            ['-',  '-', '|', '.', '-'],
+            ['A',  '.', '|', '.', '.'],
+            ['D2', '.', '.', '.', 'P2']
+        ]
 
         # Parsing the grid and locating the elements and getting the locations
         # - We are using locations instead of actual grid to make operations faster

@@ -74,6 +74,13 @@ class REINFORCE:
 
     def update(self, observations, actions, rewards):
         '''
+        Since REINFORCE is a Monte Carlo method, there will be no
+        gradual updating until the Terminal state
+        '''
+        pass
+
+    def end(self, observations, actions, rewards):
+        '''
         Updates the weights given the observations actions and rewards.
         Formula is:
             -> theta = theta + alpha x ∆π(s,a) x G

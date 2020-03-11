@@ -5,7 +5,9 @@ import os, tqdm, time
 from pathlib import Path
 
 from environments.grid_world import grid_world
-from Semi_Gradient_SARSA import SG_SARSA
+from value_based.Semi_Gradient_SARSA import SG_SARSA
+from value_based.Differential_Semi_Gradient_SARSA import SG_SARSA_Differential
+from policy_based.REINFORCE import REINFORCE
 
 from tile_coding import tile_coding
 
@@ -13,8 +15,10 @@ params = {
     'num_of_runs': 100,
     'num_of_episodes' : 1000,
     'max_steps' : 1000,
-    'alpha' : 2 ** (-14),
+    'alpha' : 2 ** (-13),
     'gamma' : 0.98,
+    'beta' : 2 ** (-12),
+    'n' : 8,
     # Creating the tilings
     'grid_size' : 5,
     'tile_size' : 4,
@@ -37,14 +41,13 @@ state_space = tilings.num_of_tilings
 episode_rewards = np.zeros(params['num_of_episodes'])
 
 # Agent created
-n = 8
-agent = SG_SARSA(state_space, action_space, n, params['alpha'], params['gamma'])
+# agent = SG_SARSA(state_space, action_space, n, params['alpha'], params['gamma'])
+agent = SG_SARSA_Differential(state_space, action_space, params['n'], params['alpha'], params['beta'])
+# agent = REINFORCE(state_space, action_space, params['alpha'], params['gamma'])
 
-np.random.seed(1)
-
-for r in range(params['num_of_runs']):
+for r in tqdm.tqdm(range(params['num_of_runs'])):
+    np.random.seed(r+1)
     agent.reset_weights()
-
     for ep in range(params['num_of_episodes']):
 
         rewards = []
@@ -76,14 +79,15 @@ for r in range(params['num_of_runs']):
 
 
         episode_rewards[ep] += score
-        print("EP: {} -------- Return: {}      ".format(ep, score), end="\r", flush=True)
+        print("EP: {} -------- Return: {}".format(ep, score), end="\r", flush=True)
 
 
 ## Saving the data
 dir_path = os.path.dirname(os.path.realpath(__file__))
 Path(dir_path + "/saves/").mkdir(parents=True, exist_ok=True)
 
-np.save(dir_path + "/saves/rewards", episode_rewards)
+name_addition = input('Enter the file name you want to find the rewards under:')
+np.save(dir_path + "/saves/rewards_" + name_addition, episode_rewards)
 
 plt.plot(episode_rewards/params['num_of_runs'])
 plt.show()
