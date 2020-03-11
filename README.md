@@ -18,10 +18,11 @@ Therefor env and agent needs to be seperated, and combined in the experiment par
 - ` step(action)` : Takes an action an returns the observations, reward and if terminal state is reached or not
 - ` reset()`: Returns the initial state, no action is needed.
 
-And agent follows pretty much only two functions outside the class;
+And agent follows only three functions outside the class;
 
 - `step(obs)`: Takes the observations and returns an action.
 - ` update(observations, actions, rewards)`: Updates the agent wheather weights or tables whatever is needed depending on the algorithm.
+- `end(observations, actions, rewards)`: Same as update, but only for terminal state.
 
 So simple example would be like
 
@@ -36,6 +37,10 @@ for e in range(num_of_episodes):
     
     observationos, rewards, actions = record_data(obs, reward, action)
     
+    if done:
+        agent.end(observationos, actions, rewards)
+        break
+        
 		agent.update(observationos, actions, rewards)
 ```
 
@@ -47,12 +52,13 @@ First part also divided into two parts, Value Based and Policy Based algorithms.
 
 Even though the main purpose of the repository is educational, it still can be used as a library that uses RL algorithm (in a linear fashion), meaning that every algorithm is implemented as efficiently as possible. To add neural networks you can modify the corresponding algorithm, should be easy at least for the *function approximation* algorithms
 
-### Environments
-
-- [x] [Grid World](/environments/grid_world.py)
-- [ ] Cart Pole
-- [ ] Mountain Car
-- [ ] Rock-Paper-Scissors
+| Environments            |                                               |          |
+| ----------------------- | --------------------------------------------- | -------- |
+| **Grid World**          | [Implementation](/environments/grid_world.py) | Tutorial |
+| **Cart Pole**           |                                               |          |
+| **Mountain Car**        |                                               |          |
+| **Rock-Paper-Scissors** |                                               |          |
+| **BlackJack**           |                                               |          |
 
 ### Value-Based Algorithms
 
@@ -60,8 +66,7 @@ Even though the main purpose of the repository is educational, it still can be u
 
 #### Control
 
-- [x] Episodic Semi-Gradient SARSA
-- [ ] Episodic Semi-Gradient n-step SARSA
+- [x] [Episodic Semi-Gradient n-step SARSA]
 - [ ] Differential Semi-Gradient SARSA
 - [ ] Differential Semi-Gradient n-step SARSA
 
