@@ -1,11 +1,12 @@
 import numpy as np
 import random
 
-class SG_SARSA_MonteCarlo:
-    def __init__(self, feature_space, action_space, alpha = 0.0001, gamma = 0.99, eps = .1):
+class SG_SARSA:
+    def __init__(self, feature_space, action_space, n=8, alpha = 0.0001, gamma = 0.99, eps = .1):
         self.alpha = alpha
         self.gamma = gamma
         self.eps = eps
+        self.n = n
     
         self.feature_space = feature_space
         self.action_space = action_space
@@ -28,10 +29,10 @@ class SG_SARSA_MonteCarlo:
         '''
         q_vals = np.zeros(self.action_space)
         for a in range(self.action_space):
-            q_vals[a] = self.q_hat(obs, a)
+            q_vals[a] = self._q_hat(obs, a)
         return q_vals
 
-    def q_hat(self, obs, action):
+    def _q_hat(self, obs, action):
         '''
         q(s, a). Calculates the q values of the action
         given the observations.
@@ -40,7 +41,7 @@ class SG_SARSA_MonteCarlo:
         '''
         return self.w.T.dot(self._x(obs, action))
 
-    def grad_q_hat(self, obs, action):
+    def _grad_q_hat(self, obs, action):
         '''
         Gradient of q(s,a)
         In out case since we are using linear functions;
@@ -66,15 +67,42 @@ class SG_SARSA_MonteCarlo:
 
     def update(self, observations, actions, rewards):
         '''
-        Updates the weights given the observations actions and rewards.
-        Formula is:
-            -> w = w + alpha x (G - q(s,a)) x ∆q(s,a)
-                    where ∆ is the gradient
-                    and G is the discounted future rewards
+        Updating the weights. Since this is n-step update, what we do is simply
+        keeping only n+1 elements in the trajectory and removing the elements
+        from beginning since we won't be using them anymore.
         '''
-        for i in range(len(observations)):
-            G = sum([r * (self.gamma ** t) for t,r in enumerate(rewards[i:])])
-            self.w += self.alpha * self.grad_q_hat(observations[i], actions[i]) * (G - self.q_hat(observations[i], actions[i]))
+        
+        # Checking if we have more than n+1 elements, if so we will remove the first element
+        # Only possible size is n+2, so we would be making it n+1 again.
+        if len(observations) > self.n+1:
+            observations.pop(0)
+            rewards.pop(0)
+            actions.pop(0)
+
+        # First checking if there are enough elements to make the update
+        if len(rewards) == self.n+1:
+            # w_{t+1} = w_t + alpha x [G - q_hat(s_0, a_0)] grad_q(s_0, a_0)
+            #               where G = sum_{t=0}^{n-1}(gamma^t) * R_t + [gamma^n * q_hat(s_{n}, a_{n})]
+            G = sum([(self.gamma ** t) * r for t,r in enumerate(rewards[:-1])])
+            G += (self.gamma ** (self.n)) * self._q_hat(observations[-1], actions[-1])
+            self.w += self.alpha * (G - self._q_hat(observations[0], actions[0])) * \
+                self._grad_q_hat(observations[0], actions[0])
+
+    def end(self, observations, actions, rewards):
+        '''
+        Should be called when the terminal state is reached, it is the update function
+        for the terminal state.
+
+        For this algorithm, we are removing elements while updating w according to the discounted
+        rewards only.
+        '''
+        for _ in range(self.n):
+            observations.pop(0)
+            rewards.pop(0)
+            actions.pop(0)
+
+            G = sum([(self.gamma ** t) * r for t,r in enumerate(rewards)])
+            self.w += self.alpha * (G - self._q_hat(observations[0], actions[0])) * self._grad_q_hat(observations[0], actions[0])
 
     def reset_weights(self):
         '''
@@ -82,4 +110,4 @@ class SG_SARSA_MonteCarlo:
         Weights dimension is d x a where a is action space and d is the feature space
         - Think of it as one one hot vector for each action
         '''
-        self.w = np.random.rand(self.feature_space * self.action_space)
+        self.w = np.zeros((self.feature_space * self.action_space))
