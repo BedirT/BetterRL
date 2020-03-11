@@ -51,6 +51,10 @@ First part also divided into two parts, Value Based and Policy Based algorithms.
 
 Even though the main purpose of the repository is educational, it still can be used as a library that uses RL algorithm (in a linear fashion), meaning that every algorithm is implemented as efficiently as possible. To add neural networks you can modify the corresponding algorithm, should be easy at least for the *function approximation* algorithms
 
+#### Example
+
+I also have [\_experiment-n-step.py](https://github.com/BedirT/BetterRL/blob/master/_experiment_n-step.py) to have a general idea of how to use the library if needed. The file contains a full size experiment setting, and totally usable as well.
+
 ### Environments
 
 | Environment Name        | Code                                          |Explanation|
@@ -69,14 +73,14 @@ Even though the main purpose of the repository is educational, it still can be u
 
 | Control Algorithms      | Code                                          |Explanation|
 | ----------------------- | --------------------------------------------- | -------- |
-| **Episodic Semi-Gradient n-step SARSA**    | [Implementation](value_based/Semi_Gradient_SARSA.py) | [Tutorial](https://bedirt.github.io/2020/03/10/Semi-Gradient-Control/) |
-| **Differential Semi-Gradient n-step SARSA**|     |          |
+| **Episodic Semi-Gradient n-step SARSA**|[Implementation](value_based/Semi_Gradient_SARSA.py)|[Tutorial](https://bedirt.github.io/reinforcement%20learning/control%20methods/2020/03/10/Semi-Gradient-Control.html)|
+| **Differential Semi-Gradient n-step SARSA**|[Implementation](value_based/Differential_Semi_Gradient_SARSA.py)|          |
 
 ### Policy-Based Algorithms
 
 | Prediction Algorithms   | Code                                          |Explanation|
 | ----------------------- | --------------------------------------------- | --------- |
-| **REINFORCE** 	  |						  |	      | 
+| **REINFORCE**|[Implementation](policy_based/REINFORCE.py)|	      | 
 | **REINFORCE with Baseline**|						  |	      | 
 | **Actor-Critic** 	  |						  |	      | 
 
