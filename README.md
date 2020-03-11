@@ -35,13 +35,12 @@ for e in range(num_of_episodes):
     action = agent.step(obs)
     obs, reward, done = env.step(action)
     
-    observationos, rewards, actions = record_data(obs, reward, action)
+    observations, rewards, actions = record_data(obs, reward, action)
     
     if done:
-        agent.end(observationos, actions, rewards)
+        agent.end(observations, actions, rewards)
         break
-        
-		agent.update(observationos, actions, rewards)
+    agent.update(observations, actions, rewards)
 ```
 
 ### Documentation Structure
@@ -52,7 +51,9 @@ First part also divided into two parts, Value Based and Policy Based algorithms.
 
 Even though the main purpose of the repository is educational, it still can be used as a library that uses RL algorithm (in a linear fashion), meaning that every algorithm is implemented as efficiently as possible. To add neural networks you can modify the corresponding algorithm, should be easy at least for the *function approximation* algorithms
 
-| Environments            |                                               |          |
+### Environments
+
+| Environment Name        | Code                                          |Explanation|
 | ----------------------- | --------------------------------------------- | -------- |
 | **Grid World**          | [Implementation](/environments/grid_world.py) | Tutorial |
 | **Cart Pole**           |                                               |          |
@@ -62,17 +63,20 @@ Even though the main purpose of the repository is educational, it still can be u
 
 ### Value-Based Algorithms
 
-#### Prediction
+| Prediction Algorithms   | Code                                          |Explanation|
+| ----------------------- | --------------------------------------------- | --------- |
+| **TD(0)** 		  |						  |	      | 
 
-#### Control
-
-- [x] [Episodic Semi-Gradient n-step SARSA]
-- [ ] Differential Semi-Gradient SARSA
-- [ ] Differential Semi-Gradient n-step SARSA
+| Control Algorithms      | Code                                          |Explanation|
+| ----------------------- | --------------------------------------------- | -------- |
+| **Episodic Semi-Gradient n-step SARSA**    | [Implementation](value_based/Semi_Gradient_SARSA.py) | [Tutorial](https://bedirt.github.io/2020/03/10/Semi-Gradient-Control/) |
+| **Differential Semi-Gradient n-step SARSA**|     |          |
 
 ### Policy-Based Algorithms
 
-- [x] REINFORCE
-- [ ] REINFORCE with Baseline
-- [ ] Actor-Critic
+| Prediction Algorithms   | Code                                          |Explanation|
+| ----------------------- | --------------------------------------------- | --------- |
+| **REINFORCE** 	  |						  |	      | 
+| **REINFORCE with Baseline**|						  |	      | 
+| **Actor-Critic** 	  |						  |	      | 
 
